@@ -1,0 +1,5 @@
+git show - View details of a specific commit
+git log - Show commit history
+git checkout - Switch branches or revert files
+git init - Create a new Git repository
+git reset - Undo commits or unstage files
