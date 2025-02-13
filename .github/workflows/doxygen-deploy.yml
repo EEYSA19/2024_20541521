@@ -1,0 +1,26 @@
+name: doxygen-deploy
+
+on:
+  push:
+    branches: [main]  # Make sure this matches your default branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Install Doxygen
+      run: sudo apt-get install -y doxygen
+
+    - name: Run Doxygen
+      run: doxygen Doxyfile  # Runs Doxygen in the root of the repository
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4.2.5
+      with:
+        branch: gh-pages
+        folder: docs/html  # Ensure this matches your Doxygen output folder
+
