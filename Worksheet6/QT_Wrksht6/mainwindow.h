@@ -31,9 +31,12 @@ private:
 public slots:
     void handleTreeClicked();
     void handleButton();
+     void on_actionOpen_File_triggered();
 
 signals:
         void statusUpdateMessage(const QString & message, int timeout);
+
+private slots:
 
 };
 #endif // MAINWINDOW_H
