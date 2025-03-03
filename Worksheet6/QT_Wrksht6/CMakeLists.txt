@@ -19,6 +19,10 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        ModelPart.cpp
+        ModelPart.h
+        ModelPartList.cpp
+        ModelPartList.h
         ${TS_FILES}
 )
 
