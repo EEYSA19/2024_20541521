@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "ModelPart.h"
 #include "ModelPartList.h"
+#include <QFileDialog>
 
 
 // Example of slot definition in mainwindow.h
@@ -37,6 +38,7 @@ signals:
         void statusUpdateMessage(const QString & message, int timeout);
 
 private slots:
+
 
 };
 #endif // MAINWINDOW_H

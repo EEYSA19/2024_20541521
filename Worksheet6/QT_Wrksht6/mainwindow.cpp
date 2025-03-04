@@ -6,6 +6,7 @@
 #include <QMessageBox>  // Include this to use QMessageBox
 #include "ModelPart.h"
 #include "ModelPartList.h"
+#include <QFileDialog>
 // Example of connecting signals and slots in mainwindow.cpp
 // Add the following line at the end of the MainWindow constructor
 
@@ -90,5 +91,20 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionOpen_File_triggered()
 {
     emit statusUpdateMessage(QString("Open File action triggered"), 0);
+
+    QString fileName = QFileDialog::getOpenFileName(
+        this,
+        tr("Open File"),
+        "C:\\",
+        tr("STL Files (*.stl);;Text Files (*.txt)")
+        );
+
+    // Check if the user selected a file
+    if (!fileName.isEmpty()) {
+        // Display the selected file name in the status bar
+        emit statusUpdateMessage(QString("Selected file: %1").arg(fileName), 5000);
+    }
+
+
 }
 
