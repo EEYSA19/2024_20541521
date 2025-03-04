@@ -7,6 +7,7 @@
 #include "ModelPart.h"
 #include "ModelPartList.h"
 #include <QFileDialog>
+#include "optiondialog.h"
 // Example of connecting signals and slots in mainwindow.cpp
 // Add the following line at the end of the MainWindow constructor
 
@@ -20,8 +21,13 @@ MainWindow::MainWindow(QWidget *parent)
     // Connect the released() signal of the pushButton object to the handleButton() slot
     connect(ui->pushButton, &QPushButton::released, this, &MainWindow::handleButton);
     connect(this, &MainWindow::statusUpdateMessage, ui->statusbar, &QStatusBar::showMessage);
-
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::handleTreeClicked);
+    // Enable right-click context menu on treeView
+
+    ui->treeView->setContextMenuPolicy(Qt::ActionsContextMenu);
+    ui-> treeView ->addAction(ui->actionItem_Options);
+
+
 
 
 
@@ -88,7 +94,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::on_actionItem_Options_triggered(){
+}
+
 void MainWindow::on_actionOpen_File_triggered()
+
 {
     emit statusUpdateMessage(QString("Open File action triggered"), 0);
 
@@ -105,6 +115,13 @@ void MainWindow::on_actionOpen_File_triggered()
         emit statusUpdateMessage(QString("Selected file: %1").arg(fileName), 5000);
     }
 
+    OptionDialog dialog(this);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        emit statusUpdateMessage(QString("Dialog accepted"), 0);
+    } else {
+        emit statusUpdateMessage(QString("Dialog rejected"), 0);
+    }
 
 }
 
