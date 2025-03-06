@@ -32,6 +32,7 @@ private:
 public slots:
     void handleTreeClicked();
     void handleButton();
+    void handleButton_2();
     void on_actionOpen_File_triggered();
     void on_actionItem_Options_triggered();
 

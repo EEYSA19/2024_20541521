@@ -6,7 +6,7 @@
   *
   *     P Evans 2022
   */
-  
+
 #ifndef VIEWER_MODELPART_H
 #define VIEWER_MODELPART_H
 
@@ -125,11 +125,16 @@ public:
       * @return pointer to new actor
       */
     //vtkActor* getNewActor();
-
+signals:
+    void emitDataChanged(const QModelIndex& index);
 private:
     QList<ModelPart*>                           m_childItems;       /**< List (array) of child items */
     QList<QVariant>                             m_itemData;         /**< List (array of column data for item */
     ModelPart*                                  m_parentItem;       /**< Pointer to parent */
+
+    unsigned char m_red;
+    unsigned char m_green;
+    unsigned char m_blue;
 
     /* These are some typical properties that I think the part will need, you might
      * want to add you own.

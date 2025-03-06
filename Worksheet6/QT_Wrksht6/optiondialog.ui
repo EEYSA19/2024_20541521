@@ -63,13 +63,25 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QSpinBox" name="spinBox_2"/>
+     <widget class="QSpinBox" name="spinBox_2">
+      <property name="maximum">
+       <number>255</number>
+      </property>
+     </widget>
     </item>
     <item>
-     <widget class="QSpinBox" name="spinBox_3"/>
+     <widget class="QSpinBox" name="spinBox_3">
+      <property name="maximum">
+       <number>255</number>
+      </property>
+     </widget>
     </item>
     <item>
-     <widget class="QSpinBox" name="spinBox"/>
+     <widget class="QSpinBox" name="spinBox">
+      <property name="maximum">
+       <number>255</number>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

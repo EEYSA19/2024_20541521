@@ -23,9 +23,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::statusUpdateMessage, ui->statusbar, &QStatusBar::showMessage);
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::handleTreeClicked);
     // Enable right-click context menu on treeView
-
     ui->treeView->setContextMenuPolicy(Qt::ActionsContextMenu);
     ui-> treeView ->addAction(ui->actionItem_Options);
+     connect(ui->pushButton_2, &QPushButton::released, this, &MainWindow::handleButton_2);
 
 
 
@@ -73,6 +73,20 @@ void MainWindow::handleButton()
     emit statusUpdateMessage(QString("Add button was clicked"), 0);
 
 }
+
+void MainWindow::handleButton_2(){
+    OptionDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        QString enteredText = dialog.getText();
+        emit statusUpdateMessage(QString("Dialog accepted: %1").arg(enteredText), 0);
+    } else {
+        emit statusUpdateMessage(QString("Dialog rejected").arg(enteredText), 0);
+    }
+}
+
+
+
 void MainWindow::handleTreeClicked()
 {
     /* Get the index of the selected item */
@@ -94,15 +108,56 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_actionItem_Options_triggered(){
+void MainWindow::on_actionItem_Options_triggered()
+{
+    QModelIndex index = ui->treeView->currentIndex();
+    if (!index.isValid()) {
+        emit statusUpdateMessage("No item selected!", 5000);
+        return;
+    }
+
+    ModelPart *selectedPart = static_cast<ModelPart*>(index.internalPointer());
+    if (!selectedPart) return;
+
+    // Extract current values
+    QString name = selectedPart->data(0).toString();
+    int r = selectedPart->getColourR();
+    int g = selectedPart->getColourG();
+    int b = selectedPart->getColourB();
+    bool isVisible = selectedPart->visible();
+
+    // Open dialog with pre-filled values
+    OptionDialog dialog(this);
+    dialog.setModelData(name, r, g, b, isVisible);
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        // Retrieve new values from dialog
+        QString newName = dialog.getName();
+        int newR = dialog.getRed();
+        int newG = dialog.getGreen();
+        int newB = dialog.getBlue();
+        bool newVisibility = dialog.isVisible();
+
+        // Update ModelPart
+        selectedPart->set(0, QVariant(newName));
+        selectedPart->setColour(newR, newG, newB);
+        selectedPart->setVisible(newVisibility);
+
+        // Update status bar
+        emit statusUpdateMessage(QString("Updated: %1, Color(%2,%3,%4), Visible: %5")
+                                     .arg(newName).arg(newR).arg(newG).arg(newB).arg(newVisibility ? "Yes" : "No"), 5000);
+    }
 }
 
-void MainWindow::on_actionOpen_File_triggered()
 
+#include <QFileInfo> // Add this include at the top
+
+void MainWindow::on_actionOpen_File_triggered()
 {
     emit statusUpdateMessage(QString("Open File action triggered"), 0);
 
-    QString fileName = QFileDialog::getOpenFileName(
+    QString filePath = QFileDialog::getOpenFileName(
         this,
         tr("Open File"),
         "C:\\",
@@ -110,18 +165,15 @@ void MainWindow::on_actionOpen_File_triggered()
         );
 
     // Check if the user selected a file
-    if (!fileName.isEmpty()) {
-        // Display the selected file name in the status bar
+    if (!filePath.isEmpty()) {
+        // Extract only the file name from the path
+        QFileInfo fileInfo(fileName);
+        QString fileName = QFileInfo(filePath).fileName();
+
+
+        // Display only the file name in the status bar
         emit statusUpdateMessage(QString("Selected file: %1").arg(fileName), 5000);
     }
-
-    OptionDialog dialog(this);
-
-    if (dialog.exec() == QDialog::Accepted) {
-        emit statusUpdateMessage(QString("Dialog accepted"), 0);
-    } else {
-        emit statusUpdateMessage(QString("Dialog rejected"), 0);
-    }
-
 }
+
 
