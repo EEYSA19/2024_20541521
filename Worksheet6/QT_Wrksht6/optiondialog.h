@@ -1,3 +1,4 @@
+
 #ifndef OPTIONDIALOG_H
 #define OPTIONDIALOG_H
 
@@ -14,16 +15,6 @@ class OptionDialog : public QDialog
 public:
     explicit OptionDialog(QWidget *parent = nullptr);
     ~OptionDialog();
-
-    void setModelData(const QString &name, int r, int g, int b, bool isVisible);
-
-    QString getName() const;
-    int getRed() const;
-    int getGreen() const;
-    int getBlue() const;
-    bool isVisible() const;
-    void setVisible(bool isVisible);
-
 
 private:
     Ui::OptionDialog *ui;

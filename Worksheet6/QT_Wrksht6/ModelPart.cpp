@@ -21,10 +21,6 @@
 ModelPart::ModelPart(const QList<QVariant>& data, ModelPart* parent )
     : m_itemData(data), m_parentItem(parent) {
 
-    colourR = 0;
-    colourG = 0;
-    colourB = 0;
-
     /* You probably want to give the item a default colour */
 }
 
@@ -65,9 +61,9 @@ int ModelPart::columnCount() const {
 }
 
 QVariant ModelPart::data(int column) const {
-    /* Return the data associated with a column of this item 
+    /* Return the data associated with a column of this item
      *  Note on the QVariant type - it is a generic placeholder type
-     *  that can take on the type of most Qt classes. It allows each 
+     *  that can take on the type of most Qt classes. It allows each
      *  column or property to store data of an arbitrary type.
      */
     if (column < 0 || column >= m_itemData.size())
@@ -77,7 +73,7 @@ QVariant ModelPart::data(int column) const {
 
 
 void ModelPart::set(int column, const QVariant &value) {
-    /* Set the data associated with a column of this item 
+    /* Set the data associated with a column of this item
      */
     if (column < 0 || column >= m_itemData.size())
         return;
@@ -100,77 +96,91 @@ int ModelPart::row() const {
 }
 
 void ModelPart::setColour(const unsigned char R, const unsigned char G, const unsigned char B) {
-    m_red = R;
-    m_green = G;
-    m_blue = B;
+    /* This is a placeholder function that you will need to modify if you want to use it */
+
+    /* As the name suggests ... */
 }
 
 unsigned char ModelPart::getColourR() {
-    return m_red;
+    /* This is a placeholder function that you will need to modify if you want to use it */
+
+    /* As the name suggests ... */
+    return 0;   // needs updating
 }
 
 unsigned char ModelPart::getColourG() {
-    return m_green;
+    /* This is a placeholder function that you will need to modify if you want to use it */
+
+    /* As the name suggests ... */
+    return 0;   // needs updating
 }
 
 
 unsigned char ModelPart::getColourB() {
-    return m_blue;
+    /* This is a placeholder function that you will need to modify if you want to use it */
+
+    /* As the name suggests ... */
+    return 0;   // needs updating
 }
 
 
 void ModelPart::setVisible(bool isVisible) {
-    this -> isVisisble = isVisible;
+    /* This is a placeholder function that you will need to modify if you want to use it */
+
+    /* As the name suggests ... */
 }
 
 bool ModelPart::visible() {
-    return this -> isVisible;
+    /* This is a placeholder function that you will need to modify if you want to use it */
+
+    /* As the name suggests ... */
+    return false;
 }
 
 void ModelPart::loadSTL( QString fileName ) {
     /* This is a placeholder function that you will need to modify if you want to use it */
-    
-    /* 1. Use the vtkSTLReader class to load the STL file 
+
+    /* 1. Use the vtkSTLReader class to load the STL file
      *     https://vtk.org/doc/nightly/html/classvtkSTLReader.html
      */
 
     /* 2. Initialise the part's vtkMapper */
-    
+
     /* 3. Initialise the part's vtkActor and link to the mapper */
 }
 
 //vtkSmartPointer<vtkActor> ModelPart::getActor() {
-    /* This is a placeholder function that you will need to modify if you want to use it */
-    
-    /* Needs to return a smart pointer to the vtkActor to allow
+/* This is a placeholder function that you will need to modify if you want to use it */
+
+/* Needs to return a smart pointer to the vtkActor to allow
      * part to be rendered.
      */
 //}
 
 //vtkActor* ModelPart::getNewActor() {
-    /* This is a placeholder function that you will need to modify if you want to use it
-     * 
-     * The default mapper/actor combination can only be used to render the part in 
+/* This is a placeholder function that you will need to modify if you want to use it
+     *
+     * The default mapper/actor combination can only be used to render the part in
      * the GUI, it CANNOT also be used to render the part in VR. This means you need
      * to create a second mapper/actor combination for use in VR - that is the role
      * of this function. */
-     
-     
-     /* 1. Create new mapper */
-     
-     /* 2. Create new actor and link to mapper */
-     
-     /* 3. Link the vtkProperties of the original actor to the new actor. This means 
+
+
+/* 1. Create new mapper */
+
+/* 2. Create new actor and link to mapper */
+
+/* 3. Link the vtkProperties of the original actor to the new actor. This means
       *    if you change properties of the original part (colour, position, etc), the
       *    changes will be reflected in the GUI AND VR rendering.
-      *    
+      *
       *    See the vtkActor documentation, particularly the GetProperty() and SetProperty()
       *    functions.
       */
-    
 
-    /* The new vtkActor pointer must be returned here */
+
+/* The new vtkActor pointer must be returned here */
 //    return nullptr;
-    
+
 //}
 

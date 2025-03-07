@@ -107,11 +107,11 @@ public:
     void setVisible(bool isVisible);
 
     /** Get visible flag
-      * @return visible flag as boolean 
+      * @return visible flag as boolean
       */
     bool visible();
-	
-	/** Load STL file
+
+    /** Load STL file
       * @param fileName
       */
     void loadSTL(QString fileName);
@@ -125,30 +125,25 @@ public:
       * @return pointer to new actor
       */
     //vtkActor* getNewActor();
-signals:
-    void emitDataChanged(const QModelIndex& index);
+
 private:
     QList<ModelPart*>                           m_childItems;       /**< List (array) of child items */
     QList<QVariant>                             m_itemData;         /**< List (array of column data for item */
     ModelPart*                                  m_parentItem;       /**< Pointer to parent */
 
-    unsigned char m_red;
-    unsigned char m_green;
-    unsigned char m_blue;
-
     /* These are some typical properties that I think the part will need, you might
      * want to add you own.
      */
     bool                                        isVisible;          /**< True/false to indicate if should be visible in model rendering */
-	
-	/* These are vtk properties that will be used to load/render a model of this part,
-	 * commented out for now but will be used later
-	 */
-	//vtkSmartPointer<vtkSTLReader>               file;               /**< Datafile from which part loaded */
+
+    /* These are vtk properties that will be used to load/render a model of this part,
+     * commented out for now but will be used later
+     */
+    //vtkSmartPointer<vtkSTLReader>               file;               /**< Datafile from which part loaded */
     //vtkSmartPointer<vtkMapper>                  mapper;             /**< Mapper for rendering */
     //vtkSmartPointer<vtkActor>                   actor;              /**< Actor for rendering */
     //vtkColor3<unsigned char>                    colour;             /**< User defineable colour */
-};  
+};
 
 
 #endif

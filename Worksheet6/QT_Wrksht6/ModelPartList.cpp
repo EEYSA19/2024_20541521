@@ -46,7 +46,7 @@ QVariant ModelPartList::data( const QModelIndex& index, int role ) const {
     /* Get a a pointer to the item referred to by the QModelIndex */
     ModelPart* item = static_cast<ModelPart*>( index.internalPointer() );
 
-    /* Each item in the tree has a number of columns ("Part" and "Visible" in this 
+    /* Each item in the tree has a number of columns ("Part" and "Visible" in this
      * initial example) return the column requested by the QModelIndex */
     return item->data( index.column() );
 }
@@ -70,17 +70,17 @@ QVariant ModelPartList::headerData( int section, Qt::Orientation orientation, in
 
 QModelIndex ModelPartList::index(int row, int column, const QModelIndex& parent) const {
     ModelPart* parentItem;
-    
+
     if( !parent.isValid() || !hasIndex(row, column, parent) )
-        parentItem = rootItem;              // default to selecting root 
+        parentItem = rootItem;              // default to selecting root
     else
         parentItem = static_cast<ModelPart*>(parent.internalPointer());
 
     ModelPart* childItem = parentItem->child(row);
     if( childItem )
         return createIndex(row, column, childItem);
-    
-    
+
+
     return QModelIndex();
 }
 
@@ -114,12 +114,12 @@ int ModelPartList::rowCount( const QModelIndex& parent ) const {
 
 
 ModelPart* ModelPartList::getRootItem() {
-    return rootItem; 
+    return rootItem;
 }
 
 
 
-QModelIndex ModelPartList::appendChild(QModelIndex& parent, const QList<QVariant>& data) {      
+QModelIndex ModelPartList::appendChild(QModelIndex& parent, const QList<QVariant>& data) {
     ModelPart* parentPart;
 
     if (parent.isValid())
@@ -129,7 +129,7 @@ QModelIndex ModelPartList::appendChild(QModelIndex& parent, const QList<QVariant
         parent = createIndex(0, 0, rootItem );
     }
 
-    beginInsertRows( parent, rowCount(parent), rowCount(parent) ); 
+    beginInsertRows( parent, rowCount(parent), rowCount(parent) );
 
     ModelPart* childPart = new ModelPart( data, parentPart );
 
@@ -143,4 +143,3 @@ QModelIndex ModelPartList::appendChild(QModelIndex& parent, const QList<QVariant
 
     return child;
 }
-

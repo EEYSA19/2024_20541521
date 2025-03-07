@@ -11,6 +11,16 @@
 // Example of connecting signals and slots in mainwindow.cpp
 // Add the following line at the end of the MainWindow constructor
 
+// VTK includes for cylinder rendering
+#include <vtkSmartPointer.h>
+#include <vtkRenderer.h>
+#include <vtkGenericOpenGLRenderWindow.h>
+#include <vtkCylinderSource.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkActor.h>
+#include <vtkProperty.h>
+#include<vtkCamera.h>
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -23,9 +33,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::statusUpdateMessage, ui->statusbar, &QStatusBar::showMessage);
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::handleTreeClicked);
     // Enable right-click context menu on treeView
+
     ui->treeView->setContextMenuPolicy(Qt::ActionsContextMenu);
     ui-> treeView ->addAction(ui->actionItem_Options);
-     connect(ui->pushButton_2, &QPushButton::released, this, &MainWindow::handleButton_2);
 
 
 
@@ -64,6 +74,34 @@ MainWindow::MainWindow(QWidget *parent)
             childItem->appendChild(childChildItem);
         }
     }
+    // VTK rendering setup
+    renderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
+    ui-> widget->setRenderWindow(renderWindow); // Check if this should be ui->vtkWidget
+
+    renderer = vtkSmartPointer<vtkRenderer>::New();
+    renderWindow->AddRenderer(renderer);
+
+    // Create a cylinder and add to renderer
+    vtkNew<vtkCylinderSource> cylinder;
+    cylinder->SetResolution(8);
+
+    vtkNew<vtkPolyDataMapper> cylinderMapper;
+    cylinderMapper->SetInputConnection(cylinder->GetOutputPort());
+
+    vtkNew<vtkActor> cylinderActor;
+    cylinderActor->SetMapper(cylinderMapper);
+    cylinderActor->GetProperty()->SetColor(1, 0, 0.35); // Reddish color
+    cylinderActor->RotateX(30.0);
+    cylinderActor->RotateY(-45.0);
+
+    renderer->AddActor(cylinderActor);
+
+    // Reset camera for proper viewing
+    renderer->ResetCamera();
+    renderer->GetActiveCamera()->Azimuth(30);
+    renderer->GetActiveCamera()->Elevation(30);
+    renderer->ResetCameraClippingRange();
+
 
 }
 
@@ -74,16 +112,6 @@ void MainWindow::handleButton()
 
 }
 
-void MainWindow::handleButton_2(){
-    OptionDialog dialog(this);
-    if (dialog.exec() == QDialog::Accepted)
-    {
-        QString enteredText = dialog.getText();
-        emit statusUpdateMessage(QString("Dialog accepted: %1").arg(enteredText), 0);
-    } else {
-        emit statusUpdateMessage(QString("Dialog rejected").arg(enteredText), 0);
-    }
-}
 
 
 
@@ -108,56 +136,24 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_actionItem_Options_triggered()
-{
-    QModelIndex index = ui->treeView->currentIndex();
-    if (!index.isValid()) {
-        emit statusUpdateMessage("No item selected!", 5000);
-        return;
-    }
-
-    ModelPart *selectedPart = static_cast<ModelPart*>(index.internalPointer());
-    if (!selectedPart) return;
-
-    // Extract current values
-    QString name = selectedPart->data(0).toString();
-    int r = selectedPart->getColourR();
-    int g = selectedPart->getColourG();
-    int b = selectedPart->getColourB();
-    bool isVisible = selectedPart->visible();
-
-    // Open dialog with pre-filled values
+void MainWindow::on_actionItem_Options_triggered(){
     OptionDialog dialog(this);
-    dialog.setModelData(name, r, g, b, isVisible);
 
-    if (dialog.exec() == QDialog::Accepted)
-    {
-        // Retrieve new values from dialog
-        QString newName = dialog.getName();
-        int newR = dialog.getRed();
-        int newG = dialog.getGreen();
-        int newB = dialog.getBlue();
-        bool newVisibility = dialog.isVisible();
-
-        // Update ModelPart
-        selectedPart->set(0, QVariant(newName));
-        selectedPart->setColour(newR, newG, newB);
-        selectedPart->setVisible(newVisibility);
-
-        // Update status bar
-        emit statusUpdateMessage(QString("Updated: %1, Color(%2,%3,%4), Visible: %5")
-                                     .arg(newName).arg(newR).arg(newG).arg(newB).arg(newVisibility ? "Yes" : "No"), 5000);
+    if (dialog.exec() == QDialog::Accepted) {
+        emit statusUpdateMessage(QString("Dialog accepted"), 0);
+    } else {
+        emit statusUpdateMessage(QString("Dialog rejected"), 0);
     }
+
 }
 
 
-#include <QFileInfo> // Add this include at the top
-
 void MainWindow::on_actionOpen_File_triggered()
+
 {
     emit statusUpdateMessage(QString("Open File action triggered"), 0);
 
-    QString filePath = QFileDialog::getOpenFileName(
+    QString fileName = QFileDialog::getOpenFileName(
         this,
         tr("Open File"),
         "C:\\",
@@ -165,15 +161,10 @@ void MainWindow::on_actionOpen_File_triggered()
         );
 
     // Check if the user selected a file
-    if (!filePath.isEmpty()) {
-        // Extract only the file name from the path
-        QFileInfo fileInfo(fileName);
-        QString fileName = QFileInfo(filePath).fileName();
-
-
-        // Display only the file name in the status bar
+    if (!fileName.isEmpty()) {
+        // Display the selected file name in the status bar
         emit statusUpdateMessage(QString("Selected file: %1").arg(fileName), 5000);
     }
-}
 
+}
 
