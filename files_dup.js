@@ -1,5 +1,4 @@
 var files_dup =
 [
-    [ "adder.cpp", "adder_8cpp.html", "adder_8cpp" ],
-    [ "adder.h", "adder_8h.html", "adder_8h" ]
+    [ "QT_Wrksht6", "dir_a398f298c974b5d87e604ddb34d21983.html", "dir_a398f298c974b5d87e604ddb34d21983" ]
 ];
